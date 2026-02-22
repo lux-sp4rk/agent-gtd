@@ -1,12 +1,23 @@
 # Agent GTD (Executive Function Stack)
 
-A complete executive function stack for AI agents. Three layers working together to manage tasks, learning, and state.
+A complete executive function stack for AI agents. This is not about a human managing an AI's tasks—it's about an **autonomous agent self-managing its own cognitive overhead** using GTD (Getting Things Done) principles.
 
 | Layer | Tool | Role |
 |---|---|---|
-| **RAM** | [Taskwarrior](https://taskwarrior.org) | Actionable tasks, current focus, backlog |
+| **RAM** | [Taskwarrior](https://taskwarrior.org) | Actionable tasks, internal focus, backlog |
 | **Hard Drive** | Markdown files | Context, decisions, lore, "why" |
-| **Workbench** | `ops/session_state.md` | What I was doing 5 seconds ago |
+| **Workbench** | `ops/session_state.md` | Real-time state recovery (where I was 5 seconds ago) |
+
+## The Value Prop: From Chatbot to Operator
+
+Most agents rely on static "self-improvement" prompts that are forgotten as soon as the session resets. **Agent GTD** deprecates these loops by giving the agent a persistent **Internal Prefrontal Cortex**:
+
+- **Self-Correcting:** When a command fails, the agent logs an `+error`.
+- **Persistent Learning:** When corrected by a user, it logs a `+learning` to be promoted to its core identity.
+- **Async Execution:** It manages its own `+next` actions across session resets.
+- **Witness Gates:** High-stakes actions (destructive or public) are gated behind explicit approval.
+
+By giving an agent its own Taskwarrior database, you shift from "prompting for better behavior" to "building a data-driven improvement pipeline."
 
 ## Overview
 
