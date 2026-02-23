@@ -8,35 +8,42 @@ A complete executive function stack for AI agents. This is not about a human man
 | **Hard Drive** | Markdown files | Context, decisions, lore, "why" |
 | **Workbench** | `ops/session_state.md` | Real-time state recovery (where I was 5 seconds ago) |
 
-## The Value Prop: From Chatbot to Operator
+## Why Agent GTD? (The Sovereign Advantage)
 
-Most agents rely on static "self-improvement" prompts that are forgotten as soon as the session resets. **Agent GTD** deprecates these loops by giving the agent a persistent **Internal Prefrontal Cortex**:
+Mainstream AI agents "drift" or plateau because they try to manage complex state inside a volatile context window. **Agent GTD** solves the fundamental scaling bottlenecks of autonomous systems:
 
-- **Self-Correcting:** When a command fails, the agent logs an `+error`.
-- **Persistent Learning:** When corrected by a user, it logs a `+learning` to be promoted to its core identity.
-- **Async Execution:** It manages its own `+next` actions across session resets.
-- **Witness Gates:** High-stakes actions (destructive or public) are gated behind explicit approval.
+### 1. Structured Persistence vs. Markdown Bloat
+Most agents use flat files for memory. These grow noisy, expensive to parse, and lead to "context amnesia." By using **Taskwarrior** as a structured external database, the agent can query its own focus with surgical precision (`task next`, `task +urgent`), keeping the active context window lean and high-signal.
 
-By giving an agent its own Taskwarrior database, you shift from "prompting for better behavior" to "building a data-driven improvement pipeline."
+### 2. Autonomous Multi-Session Continuity
+Chatbots forget the "Big Picture" once the session resets. Agent GTD provides an **Internal Prefrontal Cortex** that tracks dependencies, blockers, and `+next` actions across days or weeks. It allows an agent to "wake up" during a heartbeat, check its burndown, and make progress without human re-explanation.
 
-## Overview
+### 3. Data-Driven Self-Evolution
+Instead of vague prompts for "better behavior," Agent GTD implements a formal **Learning Pipeline**. Tool failures (`+error`) and user corrections (`+learning`) are logged as actionable tasks. This turns mistakes into a queryable backlog for structural improvement, making the agent more reliable with every run.
 
-This skill implements a high-performance executive function stack designed for autonomous agents. It moves beyond simple "prompts" into structured state management using standard Linux CLI tools.
+### 4. Overload Protection & Prioritization
+Native Taskwarrior math (Urgency/Importance) replaces LLM waffling. The agent prioritizes tasks based on explicit weights—due dates, dependencies, and project priorities—ensuring it tackles high-leverage work instead of getting lost in "low-hanging fruit" loops.
 
-### 1. The Inbox (Capture)
-Everything goes into the inbox first. No processing at capture time.
-```bash
-task add +in "description"
-```
+### 5. Offline-First & Fully Auditable
+No black-box state. The agent's "intent" is stored in a local, plain-text backed, version-controllable database. You can audit, fix, or reprioritize the agent’s internal goals directly via the CLI, providing a level of transparency and control that cloud-based task managers can't match.
 
-### 2. Error & Learning Capture
-Log failures immediately. Don't wait for review time.
-```bash
-task add project:Internal.Learnings +error "command / tool failed"
-```
+## Core Architecture
 
-### 3. Session Continuity
-The **Workbench** protocol for `ops/session_state.md` ensures that if a session resets, the agent can recover its previous context instantly.
+| Layer | Tool | Role |
+|---|---|---|
+| **RAM (Active)** | Taskwarrior | Actionable queue, internal focus, urgency math |
+| **Hard Drive (Ref)** | Markdown | Wisdom, decisions, project lore, identity |
+| **Workbench (Volatile)** | `session_state.md` | Instant context recovery for active tasks |
+
+## The Learning Loop
+
+Log failures immediately to the `Internal.Learnings` project:
+
+| Situation | Tag | Benefit |
+|---|---|---|
+| Command / tool fails | `+error` | Tracks systemic reliability issues |
+| User correction | `+learning` | Captures preference drift & identity tweaks |
+| Capability gap | `+featreq` | Maps the agent's actual "frontier" for the developer |
 
 ## Installation
 
