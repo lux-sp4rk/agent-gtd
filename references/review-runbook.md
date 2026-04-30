@@ -1,3 +1,8 @@
+---
+version: 1.0.0
+last_updated: 2026-03-28
+---
+
 # Periodic Review Runbook
 
 Run at natural breakpoints: session start, after a major task, weekly.

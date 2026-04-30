@@ -1,4 +1,17 @@
+---
+name: agent-gtd
+description: "Executive function system for AI agents: GTD-style task management, error/learning capture, and periodic self-review using Taskwarrior."
+---
+
 # Agent GTD (Executive Function Stack)
+
+## Quick Start
+
+1. **Install Taskwarrior** — `apt install taskwarrior` / `brew install task`
+2. **Test capture** — `task add +in "first item"`
+3. **Configure UDAs** — copy UDAs from `references/taskwarrior-schema.md` into `~/.taskrc`
+4. **Confirm it works** — `task next`
+5. **Point the agent** at this skill's `SKILL.md`
 
 A complete executive function stack for AI agents. This is not about a human managing an AI's tasks—it's about an **autonomous agent self-managing its own cognitive overhead** using GTD (Getting Things Done) principles.
 

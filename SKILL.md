@@ -1,6 +1,7 @@
 ---
 name: agent-gtd
 description: "Executive function system for AI agents: GTD-style task management, error/learning capture, and periodic self-review using Taskwarrior. Use when: (1) tracking multi-step goals or internal agent tasks, (2) logging command failures, user corrections, or missing capabilities, (3) running a self-improvement or review loop, (4) managing continuity across sessions, (5) triaging a backlog of agent work. Reference implementation uses Taskwarrior; patterns are portable to other task backends."
+version: 1.1.0
 ---
 
 # Agent GTD
@@ -14,6 +15,33 @@ A complete executive function stack for AI agents. Three layers working together
 | **Workbench** | `ops/session_state.md` | What I was doing 5 seconds ago |
 
 Rule of thumb: task to finish → Taskwarrior. Fact to remember → Markdown. Mid-task state → session_state.
+
+---
+
+## Installation
+
+**Taskwarrior** (required)
+```bash
+# Debian/Ubuntu
+sudo apt install taskwarrior
+# macOS
+brew install task
+# Arch
+sudo pacman -S task
+```
+
+**Python 3** (required for helper scripts)
+
+**Timewarrior** (optional — enables vitality heartbeat)
+```bash
+# Debian/Ubuntu
+sudo apt install timewarrior
+# macOS
+brew install timewarrior
+```
+
+**ClawVault** (optional — structured session handoffs)
+Falls back gracefully if absent; `task_manager.py sleep` prints a warning but continues.
 
 ---
 
@@ -110,7 +138,9 @@ Log immediately. Don't wait for review time.
 
 Use `task annotate <id> "..."` for fix details or stack traces.
 
-**Promotion rule:** 3+ recurrences of the same pattern in 30 days → promote fix to `TOOLS.md`, `AGENTS.md`, or `SOUL.md`. Mark task done, note promotion target in final annotation.
+**Automated promotion:** `promote_learnings.py` runs every 6 hours via cron. It scans `memory/lessons/` for error-like entries that recur 3+ times in 7 days — then auto-creates a Taskwarrior task in `project:Internal.Learnings` with the fix description. No manual tracking needed for recurring errors.
+
+**Manual promotion rule:** If the recurring error has a structural fix (not just a one-liner), promote it to `TOOLS.md`, `AGENTS.md`, or `SOUL.md`. Mark the Taskwarrior task done, note the promotion target in the final annotation.
 
 ```bash
 # Query learnings
@@ -190,35 +220,23 @@ python3 scripts/task_manager.py done <id> --witnessed
 
 ---
 
+**Checkpoint trigger:** When Uli says "good stopping point," "let's do something else," or similar session pause language:
+```bash
+checkpoint.sh --task <id> --project <slug> --note "what happened"
+# or for handoff:
+checkpoint.sh --handoff --project <slug> --next "next step" --blocker "blocker or none"
+```
+This updates the Taskwarrior task, appends to `memory/projects/<slug>.md`, and writes a handoff note to `memory/handoffs/`.
+
+---
+
 ## 8. Session Close Protocol
 
 **Trigger:** User signals end of session ("sleep", "done", "signing off") OR at the end of a review.
 
 **Goal:** Produce a populated handoff — never empty next steps.
 
-### Runbook
-
-1. **Pull next steps from Taskwarrior:**
-   ```bash
-   task +next status:pending limit:5
-   task +urgent status:pending limit:3
-   ```
-
-2. **Check session_state for in-progress work:**
-   ```bash
-   cat ops/session_state.md
-   ```
-
-3. **Construct summary:**
-   Format: `"[one-line session outcome] | next: [task 1], [task 2], [task 3]"`
-
-4. **Run the sleep wrapper:**
-   ```bash
-   scripts/sleep.sh "<summary>"
-   ```
-   This script validates next steps are non-empty before writing handoff.
-
-5. **Confirm:** Session sealed, top next steps shared, `/new` is safe.
+Run `scripts/sleep.sh "<summary>"` (validates next steps are non-empty before writing). Full runbook → `references/review-runbook.md`.
 
 ---
 
@@ -240,22 +258,9 @@ task project:Internal.Learnings +error status:pending list  # promote if 3+ recu
 
 ## 10. Session Continuity
 
-**Workbench cycle** — the explicit protocol for `ops/session_state.md`:
-
-1. **Pick** — select a task from `task next`
-2. **Log** — write to `ops/session_state.md`: task ID, what you're doing, last file touched
-3. **Work** — execute
-4. **Done** — mark complete in Taskwarrior (`task done <id>`)
-5. **Wipe** — reset `ops/session_state.md` to idle state
-
-```bash
-cat ops/session_state.md        # on session start: where was I?
-task active                     # any task already started?
+Pick → Log (to `ops/session_state.md`) → Work → Done → Wipe. On session start: `cat ops/session_state.md` and `task active` to recover state. Minimal format:
 ```
-
-Minimal `ops/session_state.md` format:
-```
-[YYYY-MM-DD HH:MM] Focus: <task description> (#<id>)
+[YYYY-MM-DD HH:MM] Focus: <task> (#<id>)
 Last action: <what was done>
 Open loops: <anything unfinished>
 Blockers: <none | description>
@@ -298,5 +303,4 @@ This skill includes helper scripts in `scripts/`:
 - `references/taskwarrior-schema.md` — Installation, `.taskrc` config, UDAs, custom reports, tag taxonomy
 - `references/review-runbook.md` — Periodic review loop (2 min → 20 min depth levels)
 - `references/vitality-heartbeat.md` — Agent silence detection and alerting
-- `references/memory-gardener.md` — Memory lifecycle: daily rotation, weekly LLM harvest, monthly pruning
 - `references/executive-stack.md` — Async execution pattern: Taskwarrior → Pueue bridge (future/advanced)

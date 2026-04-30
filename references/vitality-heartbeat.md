@@ -1,3 +1,8 @@
+---
+version: 1.0.0
+last_updated: 2026-03-28
+---
+
 # Vitality Heartbeat
 
 Prevents "silent death" — an agent that has crashed, looped, or stalled without the human knowing.

@@ -1,3 +1,9 @@
+---
+version: 1.0.0
+last_updated: 2026-03-28
+status: experimental
+---
+
 # Sovereign Agent Executive Stack (v1)
 
 ## Overview

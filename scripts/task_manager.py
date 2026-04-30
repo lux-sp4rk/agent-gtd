@@ -97,21 +97,8 @@ def handle_sleep(summary):
     print(f"Next: {steps_str}")
     print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     
-    # Call clawvault sleep if available
-    try:
-        result = subprocess.run(
-            ["clawvault", "sleep", full_summary],
-            capture_output=True, text=True
-        )
-        if result.returncode == 0:
-            print("✅ Handoff written to clawvault.")
-        else:
-            print(f"⚠️  clawvault sleep returned {result.returncode}")
-            if result.stderr:
-                print(f"   stderr: {result.stderr}")
-    except FileNotFoundError:
-        print("ℹ️  clawvault not found — handoff summary prepared but not persisted.")
-    
+    # Handoff persistence is handled by the agent's own session-close protocol.
+    # The summary above is printed for the human / next session to see.
     return 0
 
 def main():
