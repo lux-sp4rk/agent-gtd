@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
 Run via cron (every hour during mission hours):
 ```
-0 * * * * python3 /path/to/skills/agent-gtd/scripts/vitality_check.py
+0 * * * * python3 /path/to/skills/elephantastic/scripts/vitality_check.py
 ```
 
 ## Alternative: File-Based Heartbeat

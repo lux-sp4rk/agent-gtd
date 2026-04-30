@@ -1,10 +1,10 @@
 ---
-name: agent-gtd
-description: "Executive function system for AI agents: GTD-style task management, error/learning capture, and periodic self-review using Taskwarrior. Use when: (1) tracking multi-step goals or internal agent tasks, (2) logging command failures, user corrections, or missing capabilities, (3) running a self-improvement or review loop, (4) managing continuity across sessions, (5) triaging a backlog of agent work. Reference implementation uses Taskwarrior; patterns are portable to other task backends."
+name: elephantastic
+description: "Executive function stack for AI agents. GTD-style task management, error/learning capture, and periodic self-review using Taskwarrior. Use when: (1) tracking multi-step goals or internal agent tasks, (2) logging command failures, user corrections, or missing capabilities, (3) running a self-improvement or review loop, (4) managing continuity across sessions, (5) triaging a backlog of agent work. The agent's memory — never forget."
 version: 1.1.0
 ---
 
-# Agent GTD
+# Elephantastic
 
 A complete executive function stack for AI agents. Three layers working together:
 
@@ -40,8 +40,7 @@ sudo apt install timewarrior
 brew install timewarrior
 ```
 
-**ClawVault** (optional — structured session handoffs)
-Falls back gracefully if absent; `task_manager.py sleep` prints a warning but continues.
+**Vitality Heartbeat** (optional — monitors agent silence during mission hours)
 
 ---
 

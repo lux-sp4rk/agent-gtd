@@ -3,7 +3,7 @@
 # Usage: sleep.sh "<summary>"
 # Enforces non-empty next steps before writing handoff.
 #
-# This script is part of agent-gtd. Place it in your workspace scripts/ directory
+# This script is part of elephantastic. Place it in your workspace scripts/ directory
 # or call directly from the skill path.
 
 set -euo pipefail
@@ -11,12 +11,12 @@ set -euo pipefail
 SUMMARY="${1:-}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Find task_manager.py (prefer local, fallback to agent-gtd install)
+# Find task_manager.py (prefer local, fallback to elephantastic install)
 TASK_MANAGER=""
 if [[ -f "${SCRIPT_DIR}/task_manager.py" ]]; then
     TASK_MANAGER="${SCRIPT_DIR}/task_manager.py"
 elif [[ -f "${HOME}/.openclaw/skills/agent-gtd/scripts/task_manager.py" ]]; then
-    TASK_MANAGER="${HOME}/.openclaw/skills/agent-gtd/scripts/task_manager.py"
+    TASK_MANAGER="${HOME}/.openclaw/skills/elephantastic/scripts/task_manager.py"
 else
     echo "❌ task_manager.py not found"
     exit 1
