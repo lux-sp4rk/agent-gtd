@@ -168,6 +168,35 @@ def main():
         
         print(run_task([tid, "delete"]))
     
+    elif action == "comment":
+        if len(sys.argv) < 3:
+            print(json.dumps({"error": "Missing task ID"}))
+            return 1
+        tid = sys.argv[2]
+        # Read comment text from remaining args or stdin
+        if len(sys.argv) > 3:
+            comment_text = " ".join(sys.argv[3:])
+        else:
+            comment_text = sys.stdin.read().strip()
+        
+        if not comment_text:
+            print(json.dumps({"error": "Comment text is empty"}))
+            return 1
+        
+        # Use task-comment.sh for durable markdown thread
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        comment_script = os.path.join(script_dir, "task-comment.sh")
+        result = subprocess.run(
+            [comment_script, tid, "--stdin"],
+            input=comment_text,
+            capture_output=True, text=True
+        )
+        print(result.stdout)
+        if result.returncode != 0:
+            print(result.stderr, file=sys.stderr)
+            return result.returncode
+        return 0
+        
     elif action == "sleep":
         summary = sys.argv[2] if len(sys.argv) > 2 else "Session closed"
         return handle_sleep(summary)

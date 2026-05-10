@@ -113,6 +113,38 @@ task <id> modify +next -in
 
 ---
 
+## Task Comments (Durable Thread)
+
+For multi-agent handoffs, use `task-comment.sh` instead of `task annotate`. It writes to a task-scoped markdown file with timestamps and agent attribution:
+
+```bash
+# Via shell script
+./scripts/task-comment.sh <id> "Started implementation. Blocked on API key."
+
+# Via task_manager.py
+task_manager.py comment <id> "Progress update"
+
+# Multi-line (via stdin)
+echo "Line one
+Line two" | task_manager.py comment <id>
+```
+
+**Storage:** `memory/tasks/<task-uuid>.md`
+**Format:**
+```markdown
+# Task 42: Implement foo
+
+## 2026-05-10 18:00 — ferris
+Started implementation. Blocked on API key.
+
+## 2026-05-10 19:30 — ferris
+Unblocked. PR opened: #123.
+```
+
+**Why not `task annotate`?** Annotations are append-only plain text with no structure. The markdown thread is readable, searchable via `memory_search`, and preserves agent identity.
+
+---
+
 ## Annotations (Notes on Tasks)
 
 ```bash

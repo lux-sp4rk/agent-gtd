@@ -101,6 +101,7 @@ Routing is determined from `runtime.inbound_meta.sender.id` (Telegram chat_id).
 | `task project:ProjectName next` | Project queue |
 | `task modify <id> +next -in` | Promote inbox → next |
 | `task done <id>` | Complete and archive |
+| `task-comment.sh <id> "note"` | Append to task-scoped markdown thread |
 | `claw-sleep.sh "<summary>"` | Session handoff with next-steps |
 
 ## Tags
@@ -109,6 +110,7 @@ Routing is determined from `runtime.inbound_meta.sender.id` (Telegram chat_id).
 |---|---|
 | `+in` | Inbox — needs triage |
 | `+next` | Priority — do this first |
+| `+lux` | Org-level tag for lux-sp4rk repos — use instead of per-agent tags on public repos |
 | `+error` | Tool failure — review |
 | `+blocking` | Waiting on something |
 
@@ -134,4 +136,13 @@ Each agent has a unique tag (`+ferris`, `+vixie`, etc.) for the 30-minute heartb
 task add "description" +ferris project:Wordfall   # create with tag
 task <id> modify +ferris                          # add tag to existing task
 task +ferris status:pending                       # heartbeat filter
+```
+
+### Public Repos
+
+When working on public repos (e.g. GitHub org repos like `lux-sp4rk/*`), per-agent tags (`+vixie`, `+ferris`) can leak identity to external Taskwarrior syncs. Use `+lux` instead to tag org-level work without revealing which agent is doing it. Filter by `project:` for organization.
+
+
+```bash
+task add "Scene N illustration" project:senior-dev-devin +lux +next
 ```
